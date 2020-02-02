@@ -1,7 +1,8 @@
 ﻿@page "/fetchdata"
 @using AuthenticationWithClientSideBlazor.Shared
 @using Microsoft.AspNetCore.Authorization
-@attribute [Authorize(Roles = "Admin")]
+
+@attribute [Authorize(Policy = Policies.IsAdmin)]
 @inject HttpClient Http
 
 <h1>Weather forecast</h1>

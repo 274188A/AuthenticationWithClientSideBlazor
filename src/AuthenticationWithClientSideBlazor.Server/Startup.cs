@@ -11,6 +11,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using System.Linq;
 using System.Text;
+using AuthenticationWithClientSideBlazor.Shared;
 
 namespace AuthenticationWithClientSideBlazor.Server
 {
@@ -30,13 +31,14 @@ namespace AuthenticationWithClientSideBlazor.Server
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            
+
             services.AddDefaultIdentity<IdentityUser>()
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
+            //Authentication
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                    .AddJwtBearer(options =>
+                .AddJwtBearer(options =>
                     {
                         options.TokenValidationParameters = new TokenValidationParameters
                         {
@@ -49,6 +51,13 @@ namespace AuthenticationWithClientSideBlazor.Server
                             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtSecurityKey"]))
                         };
                     });
+
+            //Authorization
+            services.AddAuthorization(config =>
+            {
+                config.AddPolicy(Policies.IsAdmin, Policies.IsAdminPolicy());
+                config.AddPolicy(Policies.IsUser, Policies.IsUserPolicy());
+            });
 
             services.AddMvc().AddNewtonsoftJson();
             services.AddResponseCompression(opts =>

@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using AuthenticationWithClientSideBlazor.Client.Services;
+using AuthenticationWithClientSideBlazor.Shared;
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Blazor.Hosting;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -16,7 +17,12 @@ namespace AuthenticationWithClientSideBlazor.Client
             builder.Services.AddBlazoredLocalStorage();
             builder.Services.AddScoped<AuthenticationStateProvider, ApiAuthenticationStateProvider>();
             builder.Services.AddScoped<IAuthService, AuthService>();
-            builder.Services.AddAuthorizationCore();
+            builder.Services.AddAuthorizationCore(config =>
+            {
+                config.AddPolicy(Policies.IsAdmin, Policies.IsAdminPolicy());
+                config.AddPolicy(Policies.IsUser, Policies.IsUserPolicy());
+            });
+
             builder.Services.AddOptions();
 
             builder.RootComponents.Add<App>("app");

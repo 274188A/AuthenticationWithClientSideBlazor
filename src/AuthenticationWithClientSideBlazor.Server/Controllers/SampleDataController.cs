@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace AuthenticationWithClientSideBlazor.Server.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Policy = Policies.IsAdmin)]
     [Route("api/[controller]")]
     public class SampleDataController : Controller
     {
