@@ -1,7 +1,4 @@
 ﻿@page "/fetchdata"
-@using AuthenticationWithClientSideBlazor.Shared
-@using Microsoft.AspNetCore.Authorization
-
 @attribute [Authorize(Policy = Policies.IsAdmin)]
 @inject HttpClient Http
 
